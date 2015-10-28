@@ -38,7 +38,7 @@ Eson('calendar', {
 ```
 #####绑定文本框（文本框获得焦点时弹出）#####
 ```
-<div><input id="inputtext" type="text" value="2009-9-3" /></div>
+<input id="inputtext" type="text" value="2009-9-3" />
 ```
 ```
 Eson('inputtext', {
@@ -51,10 +51,8 @@ Eson('inputtext');
 ```
 #####绑定任一元素#####
 ```
-<div>
-	<input id="inputtext2" type="text" value="" readonly="readonly" />
-	<a id="selectdate" style="cursor: pointer; color: red;">选择日期</a>
-</div>
+<input id="inputtext2" type="text" value="" readonly="readonly" />
+<a id="selectdate" style="cursor: pointer; color: red;">选择日期</a>
 ```
 ```
 Eson('selectdate', {
@@ -67,7 +65,7 @@ Eson('selectdate', {
 ####多选####
 #####同月单控件#####
 ```
-<div><input id="inputtext_m" type="text" size="50" value="2009-9-3,2009-9-5,2009-9-23" /></div>
+<input id="inputtext_m" type="text" size="50" value="2009-9-3,2009-9-5,2009-9-23" />
 ```
 ```
 Eson('inputtext_m', {
@@ -76,7 +74,7 @@ Eson('inputtext_m', {
 ```
 #####不同月多控件#####
 ```
-<div><input id="inputtext_n" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23" /></div>
+<input id="inputtext_n" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23" />
 ```
 ```
 Eson('inputtext_n', {
@@ -85,7 +83,7 @@ Eson('inputtext_n', {
 ```
 #####不同月强制单控件#####
 ```
-<div><input id="inputtext_j" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23" /></div>
+<input id="inputtext_j" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23" />
 ```
 ```
 Eson('inputtext_j', {
@@ -95,7 +93,7 @@ Eson('inputtext_j', {
 ```
 #####不同月多控件，限制最多控件个数#####
 ```
-<div><input id="inputtext_i" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23,2011-9-24,2011-10-24" /></div>
+<input id="inputtext_i" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23,2011-9-24,2011-10-24" />
 ```
 ```
 Eson('inputtext_i', {
