@@ -42,13 +42,14 @@ last modify at 2015-10-26
 .calendar-quick .calendar-quick-contents a.c8 {width:12.5%}
 .calendar-quick .calendar-quick-contents a.c10 {width:10%}
 
-.calendar-quick .calendar-arraw{ margin-left: 40px;display: none;position: absolute; left:0}
-.calendar-quick .calendar-arraw div {position: absolute;width:0;height:0; border-left:5px dashed transparent;border-right:5px dashed transparent; overflow: hidden; font-size: 0; line-height:0; }
-.calendar-quick .calendar-arraw-up div.a {border-bottom:5px solid #fafafa; margin-top: -4px; }
-.calendar-quick .calendar-arraw-up div.b { border-bottom:5px solid #ddd; margin-top: -5px;}
-.calendar-quick .calendar-arraw-down div.a { border-top:5px solid #fafafa; margin-top: -1px;}
-.calendar-quick .calendar-arraw-down div.b  { border-top:5px solid #ddd; margin-top: 0px; }
-
+.calendar-arraw{ margin-left: 20px;display: none;position: absolute; left:0}
+.calendar-arraw div {position: absolute;width:0;height:0; border-left:5px dashed transparent;border-right:5px dashed transparent; overflow: hidden; font-size: 0; line-height:0; }
+.calendar-arraw-up div.a {border-bottom:5px solid #fafafa; margin-top: -4px; }
+.calendar-arraw-up div.b { border-bottom:5px solid #ddd; margin-top: -5px;}
+.calendar-arraw-down div.a { border-top:5px solid #fafafa; margin-top: -1px;}
+.calendar-arraw-down div.b  { border-top:5px solid #ddd; margin-top: 0px; }
+.calendar-main .calendar-arraw-up{ margin-top: -3px;}
+.calendar-main .calendar-arraw-down{ margin-top: 3px;}
 
 .calendar-time {margin: 0 auto 2px; cursor: pointer;  padding-top: 6px;}
 .calendar-time div { display: inline-block;zoom:1;*display:inline; height:18px; line-height:18px; padding: 0 8px; }
