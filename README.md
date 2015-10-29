@@ -1,6 +1,7 @@
 ###Eson简单日历控件
 用于web的简单日历控件，支持单选，多选，自定义控件数量，自定义星期显示，自定义工作日的第一天，自定义日期格式，表单自动绑定。
-基于09年以前一个叫UANV或ESONCalendar的日历控件制作，代码已经大部分重写。
+不依赖于任何前端框架。
+基于09年以前一个叫UANV或ESONCalendar的日历控件制作，代码已大部分重写。
 <a href="http://www.thinkasp.cn/" target="_blank">http://www.thinkasp.cn/</a>
 
 ####单选
