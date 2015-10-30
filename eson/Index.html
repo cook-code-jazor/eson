@@ -86,6 +86,10 @@
 					min : "2012-3-3",
 					max : "2012-4-3 23:59:59"
 				});
+				Eson('inputtext_k', {
+					multi_select : true,
+					control_union : true
+				});
 				SyntaxHighlighter.defaults.gutter = false;
 				SyntaxHighlighter.highlight();
 			};
@@ -121,8 +125,16 @@
 		date_up : function(y, m, d){},		//填充单元格事件，可通过返回值控制单元格内容
 		before_render : function(date){},	//开始渲染单元格事件
 		after_render : function(date){},	//单元格渲染结束事件
-		max_count : 0				//显示多控件时，最多显示的控件数
+		max_count : 0,				//显示多控件时，最多显示的控件数,
+		control_union : false		//是否允许控制器联动（控制器值控件中的年份选择器）,
+		after_select_year : function(y, type){},	//控制器选择年份的事件，y为选择的年份，type为操作类型
+		after_select_month : function(m, type){}	//控制器选择月份的事件，m为选择的月份，type为操作类型
 	});
+</pre></div>
+			<h3>关于操作类型</h3>
+<div class="mae-code"><pre class="brush : text;">
+after_select_year和after_select_month中的操作类型可取值为：-1,0,1。
+-1代表点击了左控制器（减一年或月），0代表点击了面板来选择，1代表点击了右控制器（加一年或月）。
 </pre></div>
 			<h3>A、单选</h3>
 			<h4>1、绑定到DIV容器</h4>
@@ -189,7 +201,15 @@ Eson('inputtext_n', {
 	multi_select : true
 });
 </pre></div>
-			<h4>3、不同月强制单控件</h4>
+			<h4>3、不同月多控件，控制器联动</h4>
+			<div><input id="inputtext_k" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23" /></div>
+<div class="mae-code"><pre class="brush : js;">
+Eson('inputtext_k', {
+	multi_select : true,
+	control_union : true
+});
+</pre></div>
+			<h4>4、不同月强制单控件</h4>
 			<div><input id="inputtext_j" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23" /></div>
 <div class="mae-code"><pre class="brush : js;">
 Eson('inputtext_j', {
@@ -197,7 +217,7 @@ Eson('inputtext_j', {
 	multi : false
 });
 </pre></div>
-			<h4>4、不同月多控件，限制最多控件个数</h4>
+			<h4>5、不同月多控件，限制最多控件个数</h4>
 			<div><input id="inputtext_i" type="text" size="50" value="2009-9-3,2009-10-5,2011-9-23,2011-9-24,2011-10-24" /></div>
 <div class="mae-code"><pre class="brush : js;">
 Eson('inputtext_i', {
