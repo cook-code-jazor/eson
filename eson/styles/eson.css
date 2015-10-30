@@ -34,13 +34,13 @@ last modify at 2015-10-26
 .calendar-header .select-box li.area-current { float: left; margin-left: 8px;}
 
 .calendar-quick {position: absolute; width:100%; background-color: #fafafa; margin-left: -3px; display: none; vertical-align: top; padding-bottom: 3px; text-align: center;}
-.calendar-quick.calendar-quick-time {padding-top: 3px;padding-bottom: 0px;}
+.calendar-quick-time {padding-top: 3px;padding-bottom: 0px;}
 .calendar-quick .calendar-quick-contents { width:96%; margin: auto; background-color: #fafafa; border: 1px solid #ddd; box-shadow:0 0 3px 0 #ddd; padding: 3px 0; text-align: left;-width:100%;-margin-left:2px;}
 .calendar-quick .calendar-quick-contents a {display: inline-block; width:20%; text-align: center; margin: 2px auto; cursor: pointer;}
 .calendar-quick .calendar-quick-contents a.hover {color: red;}
 .calendar-quick .calendar-quick-contents div a{width:16.666%;}
-.calendar-quick .calendar-quick-contents a.c8 {width:12.5%}
-.calendar-quick .calendar-quick-contents a.c10 {width:10%}
+.calendar-quick-minorsec .calendar-quick-contents div a {width:9.9%}
+.calendar-quick-minorsec .calendar-quick-contents div a.odd {width:10%}
 
 .calendar-arraw{ margin-left: 20px;display: none;position: absolute; left:0}
 .calendar-arraw div {position: absolute;width:0;height:0; border-left:5px dashed transparent;border-right:5px dashed transparent; overflow: hidden; font-size: 0; line-height:0; }

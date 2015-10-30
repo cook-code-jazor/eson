@@ -45,8 +45,8 @@ beautify by coldstone @ www.easyasp.cn
 .calendar-quick .calendar-quick-contents a {display: inline-block; width:20%; text-align: center; margin: 2px auto; cursor: pointer;}
 .calendar-quick .calendar-quick-contents a.hover {color: red;}
 .calendar-quick .calendar-quick-contents div a{width:16.666%;}
-.calendar-quick .calendar-quick-contents a.c8 {width:12.5%}
-.calendar-quick .calendar-quick-contents a.c10 {width:10%}
+.calendar-quick-minorsec .calendar-quick-contents div a {width:9.9%}
+.calendar-quick-minorsec .calendar-quick-contents div a.odd {width:10%}
 
 .calendar-arraw{ margin-left: 20px;display: none;position: absolute; left:0}
 .calendar-arraw div {position: absolute;width:0;height:0; border-left:5px dashed transparent;border-right:5px dashed transparent; overflow: hidden; font-size: 0; line-height:0; }
