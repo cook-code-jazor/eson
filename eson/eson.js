@@ -188,11 +188,9 @@ last modify at 2015-11-2
 	
 	function ABS(a){
 		var b = { x: a.offsetLeft, y: a.offsetTop, h:a.offsetHeight};
-		a = a.offsetParent;
-		while (a) {
+		while (a = a.offsetParent) {
 			b.x += a.offsetLeft;
 			b.y += a.offsetTop;
-			a = a.offsetParent;
 		}
 		return b;
 	}
@@ -237,10 +235,8 @@ last modify at 2015-11-2
 		}
 	}
 	function child_of(a, b){
-		var p = a.parentNode;
-		while(p){
-			if(p == b) return true;
-			p = p.parentNode;
+		while(a = a.parentNode){
+			if(a == b) return true;
 		}
 		return false;
 	}
@@ -375,7 +371,7 @@ last modify at 2015-11-2
 					}else{
 						if(_last_selected)remove_class(_last_selected,"selected")
 						_last_selected = node;
-						add_class(node,"selected")
+						add_class(node,"selected");
 						maps = {};
 						maps[get_tag(new_date)] = new_date;
 						args.push(node);
