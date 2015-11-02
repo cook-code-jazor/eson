@@ -29,7 +29,7 @@ last modify at 2015-10-26
 .calendar-header .select-box li.area-left,.calendar-header .select-box li.area-right {margin-left: 0; width: 0;height: 0;border-top: 5px dashed transparent;border-bottom: 5px dashed transparent;overflow: hidden; font-size: 0; line-height:0}
 .calendar-header .select-box li.area-left{ border-right: 5px solid #aaa;}
 .calendar-header .select-box li.area-right{border-left: 5px solid #aaa;}
-.calendar-header .select-box li.area-left.area-month { margin-left:20px}
+.calendar-header .select-box li.area-month,.calendar-header .select-box li.area-month-left { margin-left:20px}
 .calendar-header .select-box li.area-middle,.calendar-header .select-box li.area-middle-month { margin-right:4px}
 .calendar-header .select-box li.area-current { float: left; margin-left: 8px;}
 .calendar-header .select-box li.area-middle-month {width:18px}

@@ -45,20 +45,8 @@
 				if(len>0) $(".wapper").prepend(nav);
 			}
 			window.onload = function(){
-				//ParseContents();
-				Eson('calendar', {
-					first_week_day : 1,
-					weeks : "一二三四五六日",
-					onselect : function(y,m,d){
-						get("result").innerHTML = y + "-" + m + "-" + d;
-					}
-				});
-				Eson('inputtext', {
-					onselect : function(y,m,d){
-						set_val("inputtext", y + "-" + m + "-" + d);
-					}
-				});
-				//SyntaxHighlighter.defaults.gutter = false;
+				Eson('inputtext');
+				SyntaxHighlighter.defaults.gutter = false;
 				SyntaxHighlighter.highlight();
 			};
 		</script>
@@ -69,20 +57,8 @@
 			<p>用于web的简单日历控件，支持单选，多选，自定义控件数量，自定义星期显示，自定义工作日的第一天，自定义日期格式，表单自动绑定。</p>
 			<p>基于09年以前一个叫UANV或ESONCalendar的日历控件制作，代码已经大部分重写。</p>
 			<p><a href="http://www.thinkasp.cn/" target="_blank">http://www.thinkasp.cn/</a></p>
-			<p id="skin-selector"><a href="index.html">默认</a>&nbsp;<a href="index-blue.html">蓝色</a></p>
-			<h3>蓝色主体</h3>
-			<h4>绑定到DIV容器</h4>
-			<p id="result"></p>
-			<div id="calendar"></div>
-<div class="mae-code"><pre class="brush : js;">
-	Eson('calendar', {
-		first_week_day : 1,
-		weeks : "一二三四五六日",
-		onselect : function(y,m,d){
-			get("result").innerHTML = y + "-" + m + "-" + d;
-		}
-	});
-</pre></div>
+			<p id="skin-selector">主题：<a href="index.html">默认</a>&nbsp;<a href="index-blue.html">蓝色</a></p>
+			<h3>蓝色主题</h3>
 			<h4>绑定文本框（文本框获得焦点时弹出）</h4>
 			<div><input id="inputtext" type="text" value="2009-9-3" /></div>
 <div class="mae-code"><pre class="brush : js;">
