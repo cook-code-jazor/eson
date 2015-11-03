@@ -5,7 +5,90 @@ modify by anlige @ www.thinkasp.cn
 last modify at 2015-11-2
 */
 (function(){
-	var __eson = 0, __days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	var __eson = 0, __days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], __skins = {}, __skin_exp = 'calendar-skin-(\\w+)';
+	var create_xhr = function() {
+		var b = null;
+		if (window.XMLHttpRequest) {
+			b = new XMLHttpRequest();
+			create_xhr = function() {
+				return new XMLHttpRequest()
+			}
+		} else {
+			if (window.ActiveXObject) {
+				var AXO = ["MSXML2.XMLHttp.3.0", "MSXML2.XMLHttp", "Microsoft.XMLHttp", "MSXML2.XMLHttp.5.0", "MSXML2.XMLHttp.4.0"], xhr;
+				for (var i = AXO.length - 1; i >= 0; i--) {
+					try {
+						xhr = new ActiveXObject(AXO[i]);
+						create_xhr = (function(obj){ return function(){ return new ActiveXObject(obj);};})(AXO[i]);
+						b = xhr;
+					} catch (ex) {}
+				}
+			}
+		}
+		return b
+	};
+	var skin_path_checker = function(){
+		if(Eson.skin_path === null){
+			var scripts = document.getElementsByTagName('script');
+			if(scripts.length>0){
+				var script_path = scripts[0].src;
+				if(script_path.indexOf('://')<0){
+					var loc = window.location + '';
+					if(loc.slice(-1) != '/') loc = script_path.substr(0, script_path.lastIndexOf("/") + 1);
+					if(script_path.substr(0, 1) == '/'){
+						script_path = loc.substr(0, loc.indexOf('/', loc.indexOf('://') + 3)) + script_path;
+					}else{
+						script_path = loc + script_path;
+					}
+				}
+				Eson.skin_path = script_path.substr(0, script_path.lastIndexOf("/")) + "/styles/";
+			}else{
+				throw new Exception('skin_path is not defined.');
+			}
+		}		
+	};
+	var skin_loader = function(skin, callback, retry){
+		skin_path_checker();
+		retry = retry || 0;
+	    callback   = callback || function() {};
+		if(__skins.hasOwnProperty(skin)) return callback();
+		__skins[skin] = 'yes';
+		var xhr = create_xhr();
+		if(!xhr) return;
+		xhr.open("GET", Eson.skin_path + skin + ".css", true);
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState == 4){
+				if(xhr.status == 200 || xhr.status == 304){
+					var css = ".inline-block {display:inline-block;zoom:1;*display:inline; }\n" + 
+						(xhr.responseText || "").replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/\}([\w\.\#])/g, '}\n$1').replace(/(^|,)(\s*)\./gm, '$1.calendar-skin-' + skin + ' .');
+					try{
+						var ele = document.createElement('style');
+						ele.type = "text/css";
+						ele.innerHTML = css;
+						document.getElementsByTagName("head")[0].appendChild(ele);
+					}catch(e){
+						var ele = document.createElement("div");
+						ele.innerHTML = '_<style type="text/css">' + css + '</style>';
+						document.body.appendChild(ele);
+						ele.removeChild(ele.firstChild);
+					}
+					callback();
+				}else{
+					if(retry == 0)skin_loader('eson', callback, 1);
+				}
+			}
+			xhr = null;
+		};
+		xhr.send(null);
+	};
+	function set_skin(ctrl, skin){
+		skin_loader(skin, function(){
+			if(has_class(ctrl, __skin_exp)){
+				remove_class(ctrl, __skin_exp);
+				add_class(ctrl, "calendar-skin-" + skin);
+			}
+		});
+	}
 	var format_date = function(dt, fs) {
 		dt = dt || (new Date());
 
@@ -126,65 +209,6 @@ last modify at 2015-11-2
 	function visiable(src) { return src.style.display != 'none';}
 	function next(src){ return src.nextSibling;}
 	function last(src){ return src.previousSibling;}
-	function create_ui(target, opt){
-		var width = 0, cell_height = opt.cell_height || 0, cell_width = 0, h = '<div class="b"></div><div class="a"></div>';
-		if(opt.width){
-			cell_width = Math.floor(opt.width / 7);
-			width = cell_width * 7;
-			opt.cell_width = cell_width;
-		}
-		var main_win = ui_create_element("div", null, target, "calendar-main inline-block"), 
-			arraw_up_main = null, 
-			arraw_down_main = null,
-			_caption, _quick, arraw_up, _quick_content, arraw_down, sel_eles, middle_year, middle_month, body, table, time_hours, time_minutes, time_seconds, cell;
-		
-		if(width>0) main_win.style.width = width + "px";
-		if(opt.has_container !== true) arraw_up_main = ui_create_element("div", null, main_win, "calendar-arraw calendar-arraw-up", h);
-		_caption = ui_create_element("div", null, main_win, "calendar-header");
-		_quick = ui_create_element("div", null, main_win, "calendar-quick");
-			arraw_up = ui_create_element("div", null, _quick, "calendar-arraw calendar-arraw-up", h);
-			_quick_content = ui_create_element("div", null, _quick, "calendar-quick-contents");
-			arraw_down = ui_create_element("div", null, _quick, "calendar-arraw calendar-arraw-down", h);
-			
-		sel_eles = [['li', 'area-left'],['li', 'area-middle'],['li', 'area-right'],['li', 'area-left area-month-left'],['li', 'area-middle-month'],['li', 'area-right area-month-right']];
-			ui_create_elements(ui_create_element("ul", null, _caption, "select-box"), sel_eles);
-			middle_year = sel_eles[1];
-			middle_month = sel_eles[4];
-			hide(_quick);
-			
-		while(sel_eles.length>0) sel_eles.pop();
-			
-		body = ui_create_element("div", null, main_win, "calendar-body-wapper");
-		table = ui_create_element("ul", null, body, "calendar-body");
-		for (var i = 0; i < 7; i++) {
-			cell = ui_create_element("li", false, table, "weeks", opt.weeks[i % 7]);
-			if(cell_width>0) cell.style.width = cell_width + "px";
-		}
-		if(opt.show_time === true){
-			sel_eles = [["div", "calendar-hours", "0"], ":", ["div", "calendar-minutes", "0"], ":", ["div", "calendar-seconds", "0"]];
-			ui_create_elements(ui_create_element("div", null, body, "calendar-time"), sel_eles);
-			time_hours = sel_eles[0];
-			time_minutes = sel_eles[2];
-			time_seconds = sel_eles[4];
-			while(sel_eles.length>0) sel_eles.pop();
-		}
-		if(opt.has_container !== true) arraw_down_main = ui_create_element("div", null, body, "calendar-arraw calendar-arraw-down", h);
-		return {
-			year : middle_year,
-			month : middle_month,
-			weeks : table,
-			main : main_win,
-			quick : _quick,
-			quick_content : _quick_content,
-			hours : time_hours,
-			minutes : time_minutes,
-			seconds : time_seconds,
-			arraw_down : arraw_down_main,
-			arraw_up : arraw_up_main,
-			down : arraw_down,
-			up : arraw_up
-		};
-	}
 	
 	function ABS(a){
 		var b = { x: a.offsetLeft, y: a.offsetTop, h:a.offsetHeight};
@@ -234,6 +258,15 @@ last modify at 2015-11-2
 			ele["on" + ev] = handler;
 		}
 	}
+	function off(ele, ev, handler, cap){
+		if(ele.removeEventListener){
+			ele.removeEventListener(ev, handler, cap!==true);
+		}else if(ele.detachEvent){
+			ele.detachEvent("on" + ev, handler);
+		}else{
+			ele["on" + ev] = null;
+		}
+	}
 	function child_of(a, b){
 		while(a = a.parentNode){
 			if(a == b) return true;
@@ -263,8 +296,78 @@ last modify at 2015-11-2
 		else add_class(src, exp, cls_name);
 		return has;
 	}
+	function create_ui(target, opt){
+		var width = 0, cell_height = opt.cell_height || 0, cell_width = 0, h = '<div class="b"></div><div class="a"></div>', skin = null;
+		if(opt.width){
+			cell_width = Math.floor(opt.width / 7);
+			width = cell_width * 7;
+			opt.cell_width = cell_width;
+		}
+		if(opt.has_container !== true && opt.skin_class_name) skin = ui_create_element("div", null, target, 'calendar-skin-' + opt.skin_class_name + ' inline-block');
+		var main = ui_create_element("div", null, skin || target, "calendar-main inline-block"),
+			arraw_up_main = null, 
+			arraw_down_main = null,
+			_caption, _quick, arraw_up, _quick_content, arraw_down, sel_eles, middle_year, middle_month, body, table, time_hours, time_minutes, time_seconds, cell;
+		
+		if(width>0) main.style.width = width + "px";
+		if(opt.has_container !== true) arraw_up_main = ui_create_element("div", null, main, "calendar-arraw calendar-arraw-up", h);
+		_caption = ui_create_element("div", null, main, "calendar-header");
+		_quick = ui_create_element("div", null, main, "calendar-quick");
+			arraw_up = ui_create_element("div", null, _quick, "calendar-arraw calendar-arraw-up", h);
+			_quick_content = ui_create_element("div", null, _quick, "calendar-quick-contents");
+			arraw_down = ui_create_element("div", null, _quick, "calendar-arraw calendar-arraw-down", h);
+			
+		sel_eles = [['li', 'area-left'],['li', 'area-middle'],['li', 'area-right'],['li', 'area-left area-month-left'],['li', 'area-middle-month'],['li', 'area-right area-month-right']];
+			ui_create_elements(ui_create_element("ul", null, _caption, "select-box"), sel_eles);
+			middle_year = sel_eles[1];
+			middle_month = sel_eles[4];
+			hide(_quick);
+			
+		while(sel_eles.length>0) sel_eles.pop();
+			
+		body = ui_create_element("div", null, main, "calendar-body-wapper");
+		table = ui_create_element("ul", null, body, "calendar-body");
+		for (var i = 0; i < 7; i++) {
+			cell = ui_create_element("li", false, table, "weeks", opt.weeks[i % 7]);
+			if(cell_width>0) cell.style.width = cell_width + "px";
+		}
+		if(opt.show_time === true){
+			sel_eles = [["div", "calendar-hours", "0"], ":", ["div", "calendar-minutes", "0"], ":", ["div", "calendar-seconds", "0"]];
+			ui_create_elements(ui_create_element("div", null, body, "calendar-time"), sel_eles);
+			time_hours = sel_eles[0];
+			time_minutes = sel_eles[2];
+			time_seconds = sel_eles[4];
+			while(sel_eles.length>0) sel_eles.pop();
+		}
+		if(opt.has_container !== true) arraw_down_main = ui_create_element("div", null, body, "calendar-arraw calendar-arraw-down", h);
+		return {
+			year : middle_year,
+			month : middle_month,
+			weeks : table,
+			main : skin || main,
+			quick : _quick,
+			quick_content : _quick_content,
+			hours : time_hours,
+			minutes : time_minutes,
+			seconds : time_seconds,
+			arraw_down : arraw_down_main,
+			arraw_up : arraw_up_main,
+			down : arraw_down,
+			up : arraw_up
+		};
+	}
 	var Eson = window.Eson = function(src, option, _maps){
 		option = option || {};
+		var skin = option.skin || Eson.skin;
+		if(skin){
+			option.skin_class_name = skin;
+			if(!__skins.hasOwnProperty(skin)){
+				skin_loader(skin, function(){
+					Eson(src, option, _maps);
+				});
+				return;
+			}
+		}
 		if(option.multi === true) {
 			option.multi = null;
 			return multi_control(src, option);
@@ -278,7 +381,8 @@ last modify at 2015-11-2
 			multi_select : false,
 			min : 0,
 			max : 0,
-			control_union : false
+			control_union : false,
+			skin : ""
 		}, dateBox = [], controls = null, maps = _maps || {}, __date, _last_selected, last_quick = null;
 		if(option.min) option.min = +parse_date(option.min);
 		if(option.max) option.max = +parse_date(option.max);
@@ -685,31 +789,29 @@ last modify at 2015-11-2
 			if(options.show_time===true) args.push(fixnumber(__date.getHours()),fixnumber(__date.getMinutes()),fixnumber(__date.getSeconds()));
 			options.onselect.apply(__date,args);
 		}
+		function handler_doc_click(e){
+			if(!controls || !controls.main) return;
+			var target = fix_event(e || event);
+			if(src == target || controls.main == target || child_of(target, controls.main)) return;
+			hide(controls.main);
+		}
+		function handler_src_click(e){
+			cancel_bubble(e);
+			fix_position(controls, options.bindto || src);
+		}
+		function handler_src_focus(e){
+			fix_position(controls, src);
+		}
 		var bind = null;
 		if(tag == "input"){
-			on(document,"click",function(e){
-				if(!controls || !controls.main) return;
-				var target = fix_event(e || event);
-				if(src == target || controls.main == target || child_of(target, controls.main)) return;
-				hide(controls.main);
-			});
-			on(src, "focus", function(e){
-				fix_position(controls, src);
-			});
+			on(document,"click", handler_doc_click);
+			on(src, "focus", handler_src_focus);
 		}else if(tag == "div"){
 			options.remain = true;
 			bind = src;
 		}else{
-			on(document,"click",function(e){
-				if(!controls || !controls.main) return;
-				var target = fix_event(e || event);
-				if(controls.main == target || child_of(target, controls.main)) return;
-				hide(controls.main);
-			});
-			on(src, "click", function(e){
-				cancel_bubble(e);
-				fix_position(controls, options.bindto || src);
-			});
+			on(document,"click",handler_doc_click);
+			on(src, "click", handler_src_click);
 		}
 		controls = create_ui(bind, options);
 		if(!bind)hide(controls.main);
@@ -718,20 +820,44 @@ last modify at 2015-11-2
 		if(options.set_up_date) __date = parse_date(options.set_up_date) || __date;
 		date_up(__date);
 		if(options.show_time===true) time_set(__date);
-		return {
+		var _this = {
 			options : options,
 			controls : controls,
 			set_up : set_up,
 			id : __eson,
 			year : date_year,
-			month : date_month
+			month : date_month,
+			//destroy : function(){
+			//	off(src, 'click', handler_src_click);
+			//	off(src, 'focus', handler_src_focus);
+			//	off(document, 'click', handler_doc_click);
+			//	controls.main.parentNode.removeChild(controls.main);
+			//	controls.main.onclick = null;
+			//	for(var i in controls){
+			//		if(controls.hasOwnProperty(i)) controls[i] = null;
+			//	}
+			//	controls = null;
+			//	src = null;
+			//},
+			skin : function(skin){
+				set_skin(controls.main, skin);
+			}
 		};
+		var fn = options.after_build || Eson.after_build;
+		if(fn) fn(_this);
+		return _this;
 	};
+	Eson.skin = null;
+	Eson.after_build = null;
+	Eson.skin_path = null;
 	Eson.format = format_date;
 	Eson.on = on;
+	Eson.off = off;
 	Eson.cancel_bubble = cancel_bubble;
 	Eson.child_of = child_of;
 	var multi_control = function(src, option, maps){
+		var fn = option.after_build || Eson.after_build;
+		if(fn) option.after_build = Eson.after_build = null;
 		var tools = [], tool = null;
 		function on_select_year(ym, val, t, id){
 			if(t == 0) return;
@@ -748,7 +874,9 @@ last modify at 2015-11-2
 			}
 		}
 		function create_group_ui(){
-			var group = ui_create_element("div", null, null, "calendar-group inline-block"), set_up_date, arraw_down_main, arraw_up_main;
+			var group, set_up_date, arraw_down_main, arraw_up_main, skin = null;
+			if(options.skin_class_name) skin = ui_create_element("div", null, null, 'calendar-skin-' + options.skin_class_name + ' inline-block');
+			group = ui_create_element("div", null, skin, "calendar-group inline-block");
 			arraw_up_main = ui_create_element("div", null, group, "calendar-arraw calendar-arraw-up", '<div class="b"></div><div class="a"></div>');
 			for(var i=0;i<options.count;i++){
 				if(options.set_up_months) set_up_date = options.set_up_months[i];
@@ -770,16 +898,30 @@ last modify at 2015-11-2
 			}
 			if(options.show_close !== false){
 				var close = ui_create_element("div", null, group, "calendar-close", "x");
-				close.onclick = function(){
-					hide(group)
+				close.onclick = function(e){
+					hide(skin || group);
 				};
 			}
 			arraw_down_main = ui_create_element("div", null, group, "calendar-arraw calendar-arraw-down", '<div class="b"></div><div class="a"></div>');
 			return {
-				main : group,
+				main : skin || group,
 				arraw_up : arraw_up_main,
-				arraw_down : arraw_down_main
+				arraw_down : arraw_down_main,
+				close : close
 			};
+		}
+		function handler_doc_click(e){
+			if(!controls || !controls.main) return;
+			var target = fix_event(e || event);
+			if(src == target || controls.main == target || child_of(target, controls.main)) return;
+			hide(controls.main);
+		}
+		function handler_src_click(e){
+			cancel_bubble(e);
+			fix_position(controls, options.bindto || src);
+		}
+		function handler_src_focus(e){
+			fix_position(controls, src);
 		}
 		var options = {
 			date : [],
@@ -807,35 +949,38 @@ last modify at 2015-11-2
 				if(options.onerror) options.onerror('target element error.');
 				return;
 			}
-			on(document,"click",function(e){
-				if(!controls || !controls.main) return;
-				var target = fix_event(e || event);
-				if(src == target || controls.main == target || child_of(target, controls.main)) return;
-				hide(controls.main);
-			});
-			on(src, "focus", function(){
-				fix_position(controls, src);
-			});
+			on(document,"click", handler_doc_click);
+			on(src, "focus", handler_src_focus);
 		}else if(tag == "div"){
 			bint2 = true;
 		}else{
-			on(document,"click",function(e){
-				if(!controls || !controls.main) return;
-				var target = fix_event(e || event);
-				if(controls.main == target || child_of(target, controls.main)) return;
-				hide(controls.main);
-			});
-			on(src, "click", function(e){
-				cancel_bubble(e);
-				fix_position(controls, src);
-			});
+			on(document,"click", handler_doc_click);
+			on(src, "click", handler_src_click);
 		}
 		controls = create_group_ui();
 		if(bint2) src.appendChild(controls.main);
 		else hide(controls.main);
-		return {
+		var _this = {
 			options : options,
-			controls : controls
+			controls : controls,
+			//destroy : function(){
+			//	off(src, 'click', handler_src_click);
+			//	off(src, 'focus', handler_src_focus);
+			//	off(document, 'click', handler_doc_click);
+			//	for(var i = 0; i<tools.length; i++) tools[i].destroy();
+			//	controls.main.parentNode.removeChild(controls.main);
+			//	if(controls.close) controls.close.onclick = null;
+			//	for(var i in controls){
+			//		if(controls.hasOwnProperty(i)) controls[i] = null;
+			//	}
+			//	controls = null;
+			//	src = null;
+			//},
+			skin : function(skin){
+				set_skin(controls.main, skin);
+			}
 		};
+		if(fn) fn(_this);
+		return _this;
 	};
 })();
