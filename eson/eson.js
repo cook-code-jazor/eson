@@ -76,8 +76,8 @@ last modify at 2015-11-2
 				}else{
 					if(retry == 0)skin_loader('eson', callback, 1);
 				}
+				xhr = null;
 			}
-			xhr = null;
 		};
 		xhr.send(null);
 	};
@@ -827,18 +827,18 @@ last modify at 2015-11-2
 			id : __eson,
 			year : date_year,
 			month : date_month,
-			//destroy : function(){
-			//	off(src, 'click', handler_src_click);
-			//	off(src, 'focus', handler_src_focus);
-			//	off(document, 'click', handler_doc_click);
-			//	controls.main.parentNode.removeChild(controls.main);
-			//	controls.main.onclick = null;
-			//	for(var i in controls){
-			//		if(controls.hasOwnProperty(i)) controls[i] = null;
-			//	}
-			//	controls = null;
-			//	src = null;
-			//},
+			destroy : function(){
+				off(src, 'click', handler_src_click);
+				off(src, 'focus', handler_src_focus);
+				off(document, 'click', handler_doc_click);
+				controls.main.parentNode.removeChild(controls.main);
+				controls.main.onclick = null;
+				for(var i in controls){
+					if(controls.hasOwnProperty(i)) controls[i] = null;
+				}
+				controls = null;
+				src = null;
+			},
 			skin : function(skin){
 				set_skin(controls.main, skin);
 			}
@@ -963,19 +963,19 @@ last modify at 2015-11-2
 		var _this = {
 			options : options,
 			controls : controls,
-			//destroy : function(){
-			//	off(src, 'click', handler_src_click);
-			//	off(src, 'focus', handler_src_focus);
-			//	off(document, 'click', handler_doc_click);
-			//	for(var i = 0; i<tools.length; i++) tools[i].destroy();
-			//	controls.main.parentNode.removeChild(controls.main);
-			//	if(controls.close) controls.close.onclick = null;
-			//	for(var i in controls){
-			//		if(controls.hasOwnProperty(i)) controls[i] = null;
-			//	}
-			//	controls = null;
-			//	src = null;
-			//},
+			destroy : function(){
+				off(src, 'click', handler_src_click);
+				off(src, 'focus', handler_src_focus);
+				off(document, 'click', handler_doc_click);
+				for(var i = 0; i<tools.length; i++) tools[i].destroy();
+				controls.main.parentNode.removeChild(controls.main);
+				if(controls.close) controls.close.onclick = null;
+				for(var i in controls){
+					if(controls.hasOwnProperty(i)) controls[i] = null;
+				}
+				controls = null;
+				src = null;
+			},
 			skin : function(skin){
 				set_skin(controls.main, skin);
 			}
