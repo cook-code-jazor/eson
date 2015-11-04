@@ -27,28 +27,28 @@ last modify at 2015-11-2
 		}
 		return b
 	};
-	var skin_path_checker = function(){
-		if(Eson.skin_path === null){
-			var scripts = document.getElementsByTagName('script');
-			if(scripts.length>0){
-				var script_path = scripts[0].src;
-				if(script_path.indexOf('://')<0){
-					var loc = window.location + '';
-					if(loc.slice(-1) != '/') loc = script_path.substr(0, script_path.lastIndexOf("/") + 1);
-					if(script_path.substr(0, 1) == '/'){
-						script_path = loc.substr(0, loc.indexOf('/', loc.indexOf('://') + 3)) + script_path;
-					}else{
-						script_path = loc + script_path;
-					}
-				}
-				Eson.skin_path = script_path.substr(0, script_path.lastIndexOf("/")) + "/styles/";
-			}else{
-				throw new Exception('skin_path is not defined.');
-			}
-		}		
-	};
+	//var skin_path_checker = function(){
+	//	if(Eson.skin_path === null){
+	//		var scripts = document.getElementsByTagName('script');
+	//		if(scripts.length>0){
+	//			var script_path = scripts[scripts.length-1].src;
+	//			scripts[scripts.length-1].id='aaa'
+	//			if(script_path.indexOf('://')<0){
+	//				var loc = window.location + '';
+	//				if(loc.slice(-1) != '/') loc = script_path.substr(0, script_path.lastIndexOf("/") + 1);
+	//				if(script_path.substr(0, 1) == '/'){
+	//					script_path = loc.substr(0, loc.indexOf('/', loc.indexOf('://') + 3)) + script_path;
+	//				}else{
+	//					script_path = loc + script_path;
+	//				}
+	//			}
+	//			Eson.skin_path = script_path.substr(0, script_path.lastIndexOf("/")) + "/styles/";
+	//		}else{
+	//			throw new Exception('skin_path is not defined.');
+	//		}
+	//	}		
+	//};
 	var skin_loader = function(skin, callback, retry){
-		skin_path_checker();
 		retry = retry || 0;
 	    callback   = callback || function() {};
 		if(__skins.hasOwnProperty(skin)) return callback();
@@ -843,8 +843,10 @@ last modify at 2015-11-2
 				set_skin(controls.main, skin);
 			}
 		};
-		var fn = options.after_build || Eson.after_build;
-		if(fn) fn(_this);
+		if(options.has_container !== true){
+			var fn = options.after_build || Eson.after_build;
+			if(fn) fn(_this);
+		}
 		return _this;
 	};
 	Eson.skin = null;
@@ -856,8 +858,6 @@ last modify at 2015-11-2
 	Eson.cancel_bubble = cancel_bubble;
 	Eson.child_of = child_of;
 	var multi_control = function(src, option, maps){
-		var fn = option.after_build || Eson.after_build;
-		if(fn) option.after_build = Eson.after_build = null;
 		var tools = [], tool = null;
 		function on_select_year(ym, val, t, id){
 			if(t == 0) return;
@@ -980,6 +980,7 @@ last modify at 2015-11-2
 				set_skin(controls.main, skin);
 			}
 		};
+		var fn = options.after_build || Eson.after_build;
 		if(fn) fn(_this);
 		return _this;
 	};

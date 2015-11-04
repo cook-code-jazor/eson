@@ -7,7 +7,6 @@
 		<meta name="description" content="用于web的Eson简单日历控件，支持任意绑定，自定义控件数量，自定义星期显示，自定义工作日的第一天，自定义日期格式，表单自动绑定。"/>
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<link href="style.css" type="text/css" rel="stylesheet" />
-		<link href="styles/eson-blue.css" type="text/css" rel="stylesheet" />
 		<link href="../css/marked-highlight.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="../scripts/highlight.js"></script>
 		<script type="text/javascript" src="eson.min.js"></script>
@@ -45,6 +44,8 @@
 				if(len>0) $(".wapper").prepend(nav);
 			}
 			window.onload = function(){
+				Eson.skin = 'blue';
+				Eson.skin_path = 'styles/';
 				Eson('inputtext');
 				SyntaxHighlighter.defaults.gutter = false;
 				SyntaxHighlighter.highlight();
