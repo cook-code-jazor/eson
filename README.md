@@ -1,6 +1,5 @@
-###Eson简单日历控件 @ 2015-11-2
+###Eson简单日历控件 @ 2015-11-6
 用于web的简单日历控件。
-基于09年以前一个叫UANV或ESONCalendar的日历控件制作，代码已大部分重写。
 <a href="http://www.thinkasp.cn/" target="_blank">http://www.thinkasp.cn/</a>
 
 * 不依赖于任何前端框架。
