@@ -27,27 +27,6 @@ last modify at 2015-11-2
 		}
 		return b
 	};
-	//var skin_path_checker = function(){
-	//	if(Eson.skin_path === null){
-	//		var scripts = document.getElementsByTagName('script');
-	//		if(scripts.length>0){
-	//			var script_path = scripts[scripts.length-1].src;
-	//			scripts[scripts.length-1].id='aaa'
-	//			if(script_path.indexOf('://')<0){
-	//				var loc = window.location + '';
-	//				if(loc.slice(-1) != '/') loc = script_path.substr(0, script_path.lastIndexOf("/") + 1);
-	//				if(script_path.substr(0, 1) == '/'){
-	//					script_path = loc.substr(0, loc.indexOf('/', loc.indexOf('://') + 3)) + script_path;
-	//				}else{
-	//					script_path = loc + script_path;
-	//				}
-	//			}
-	//			Eson.skin_path = script_path.substr(0, script_path.lastIndexOf("/")) + "/styles/";
-	//		}else{
-	//			throw new Exception('skin_path is not defined.');
-	//		}
-	//	}		
-	//};
 	var skin_loader = function(skin, callback, retry){
 		retry = retry || 0;
 	    callback   = callback || function() {};
