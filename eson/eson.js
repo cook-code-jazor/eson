@@ -362,7 +362,7 @@ last modify at 2015-11-2
 			max : 0,
 			control_union : false,
 			skin : ""
-		}, dateBox = [], controls = null, maps = _maps || {}, __date, _last_selected, last_quick = null;
+		}, dateBox = [], controls = null, maps = _maps || {}, __date, _last_selected, last_quick = null, inited = false;
 		if(option.min) option.min = +parse_date(option.min);
 		if(option.max) option.max = +parse_date(option.max);
 		for(var i in option){
@@ -768,6 +768,34 @@ last modify at 2015-11-2
 			if(options.show_time===true) args.push(fixnumber(__date.getHours()),fixnumber(__date.getMinutes()),fixnumber(__date.getSeconds()));
 			options.onselect.apply(__date,args);
 		}
+		function init_maps(value, clear){
+			if(clear===true){
+				for(var i in maps){
+					if(maps.hasOwnProperty(i)) maps[i] = null;
+				}
+			}
+			if(!value){
+				date_up(new Date());
+				return;
+			}
+			if(typeof value == 'string'){
+				if(!value){
+					date_up(new Date());
+					return;
+				}
+				value = value.split(',');
+			}
+			if(value.length<=0) {
+				date_up(new Date());
+				return;
+			}
+			var dt;
+			for(var i=0;i<value.length;i++){
+				dt = parse_date(value[i]);
+				maps[get_tag(dt)] = dt;
+			}
+			date_up(dt);
+		}
 		function handler_doc_click(e){
 			if(!controls || !controls.main) return;
 			var target = fix_event(e || event);
@@ -778,10 +806,14 @@ last modify at 2015-11-2
 			cancel_bubble(e);
 			fix_position(controls, options.bindto || src);
 			hide(controls.quick);
+			if(inited == true)init_maps(src.value, true);
+			inited = true
 		}
 		function handler_src_focus(e){
 			fix_position(controls, src);
 			hide(controls.quick);
+			if(inited == true)init_maps(src.value, true);
+			inited = true
 		}
 		var bind = null;
 		if(tag == "input"){
@@ -822,7 +854,8 @@ last modify at 2015-11-2
 			},
 			skin : function(skin){
 				set_skin(controls.main, skin);
-			}
+			},
+			init_maps : init_maps
 		};
 		if(options.has_container !== true){
 			var fn = options.after_build || Eson.after_build;
@@ -839,13 +872,14 @@ last modify at 2015-11-2
 	Eson.cancel_bubble = cancel_bubble;
 	Eson.child_of = child_of;
 	var multi_control = function(src, option, maps){
-		var tools = [], tool = null;
+		var tools = [], tool = null, inited = false;
 		function on_select_year(ym, val, t, id){
 			if(t == 0) return;
 			var tool;
 			for(var i=0;i<tools.length;i++){
 				if(i != id){
 					tool = tools[i];
+					if(!tool) continue;
 					if(ym == 'y'){
 						tool.set_up(tool.year() + t);
 					}else{
@@ -897,14 +931,50 @@ last modify at 2015-11-2
 			if(src == target || controls.main == target || child_of(target, controls.main)) return;
 			hide(controls.main);
 		}
+		function re_date_up(){
+			if(inited == true){
+				for(var i in maps){
+					if(maps.hasOwnProperty(i)) maps[i] = null;
+				}
+				var dt, mon, non, __date = src.value, maps_month = {},count = 0;
+				if(!__date) __date = [];
+				if(typeof __date == "string") __date = __date.split(",");
+				for(var i=0;i<__date.length;i++){
+					dt = parse_date(__date[i]);
+					mon = get_tag(dt);
+					maps[mon] = dt;
+					non = mon.substr(0,6);
+					if(!maps_month.hasOwnProperty(non)){
+						maps_month[non]= [];
+						count++;
+					}
+					maps_month[non].push(dt);
+				}
+				var index = 0, tool;
+				for(var i in maps_month){
+					if(!maps_month.hasOwnProperty(i)) continue;
+					if(tools[index]){
+						hide(tools[index].controls.quick);
+						tools[index].init_maps(maps_month[i]);
+					}
+					index++;
+				}
+				if(index<tools.length){
+					for(var i=index;i<tools.length;i++){
+						if(tools[i]) tools[i].init_maps();
+					}
+				}
+			}
+			inited = true;
+		}
 		function handler_src_click(e){
 			cancel_bubble(e);
 			fix_position(controls, options.bindto || src);
-			for(var i=0;i<tools.length;i++) hide(tools[i].controls.quick);
+			re_date_up();
 		}
 		function handler_src_focus(e){
 			fix_position(controls, src);
-			for(var i=0;i<tools.length;i++) hide(tools[i].controls.quick);
+			re_date_up();
 		}
 		var options = {
 			date : [],
