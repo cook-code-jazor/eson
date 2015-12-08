@@ -777,9 +777,11 @@ last modify at 2015-11-2
 		function handler_src_click(e){
 			cancel_bubble(e);
 			fix_position(controls, options.bindto || src);
+			hide(controls.quick);
 		}
 		function handler_src_focus(e){
 			fix_position(controls, src);
+			hide(controls.quick);
 		}
 		var bind = null;
 		if(tag == "input"){
@@ -871,8 +873,8 @@ last modify at 2015-11-2
 							on_select_year('m', y, t, id);
 						};
 					})(tools.length);
-					tools.push(tool);
 				}
+				tools.push(tool);
 				tool = null;
 			}
 			if(options.show_close !== false){
@@ -898,9 +900,11 @@ last modify at 2015-11-2
 		function handler_src_click(e){
 			cancel_bubble(e);
 			fix_position(controls, options.bindto || src);
+			for(var i=0;i<tools.length;i++) hide(tools[i].controls.quick);
 		}
 		function handler_src_focus(e){
 			fix_position(controls, src);
+			for(var i=0;i<tools.length;i++) hide(tools[i].controls.quick);
 		}
 		var options = {
 			date : [],

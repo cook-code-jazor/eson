@@ -1,4 +1,4 @@
-###Eson简单日历控件 @ 2015-11-6
+###Eson简单日历控件 @ 2015-12-8
 用于web的简单日历控件。
 <a href="http://www.thinkasp.cn/" target="_blank">http://www.thinkasp.cn/</a>
 
