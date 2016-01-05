@@ -5,13 +5,13 @@ modify by anlige @ www.thinkasp.cn
 last modify at 2015-10-26
 */
 .inline-block {display:inline-block;zoom:1;*display:inline; }
-.calendar-group {border: 1px solid #ddd;background-color:#fefefe;font:normal 14px /120% 'Consolas','Courier New','Microsoft YaHei'; border-radius:3px; box-shadow:0 0 3px 0px #ddd}
+.calendar-group {border: 1px solid #ddd;background-color:#fefefe;font:normal 14px /120% 'Consolas','Courier New','Microsoft YaHei'; border-radius:3px; box-shadow:0 0 3px 0px #ddd;-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;}
 .calendar-group .calendar-close {text-align: right; padding-right: 12px; padding-bottom: 3px; cursor: pointer;}
 .calendar-group .calendar-main {display:inline-block;zoom:1;*display:inline; border: 0px; padding: 3px 3px 0 3px;; box-shadow:0 0 0 0 #fff}
-.calendar-main{background-color:#fefefe;font:normal 14px /120% 'Consolas','Courier New','Microsoft YaHei';border:1px #ddd solid; padding: 3px; margin: 0;width:210px; position: relative;border-radius:3px; box-shadow:0 0 3px 0px #ddd}
+.calendar-main{background-color:#fefefe;font:normal 14px /120% 'Consolas','Courier New','Microsoft YaHei';border:1px #ddd solid; padding: 3px; margin: 0;width:210px; position: relative;border-radius:3px; box-shadow:0 0 3px 0px #ddd;-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;}
 
-.calendar-main ul,.calendar-main li {list-style:none;margin:0;padding:0;box-sizing:content-box;}
-.calendar-body li {display:inline-block;width:30px; cursor:pointer; text-align:center; line-height:24px;margin: 0;zoom:1;*display:inline; }
+.calendar-main ul,.calendar-main li {list-style:none;margin:0;padding:0;-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;}
+.calendar-body li {display:inline-block;width:30px; cursor:pointer; text-align:center; line-height:24px;margin: 0;zoom:1;*display:inline;padding: 0px 0px !important;}
 .calendar-body li.weeks{font-weight:normal;border-bottom:1px #ddd solid;padding: 0; margin-bottom: 3px; font-weight:bold; color:#333 }
 .calendar-body li.weeks.checked { font-weight:bold;color: #2CB4BF;}
 .calendar-body li div{margin: 2px; border-radius:3px;cursor:pointer;}
@@ -23,16 +23,16 @@ last modify at 2015-10-26
 .calendar-body li.cal-end {display: block; width:0;height:0;overflow: hidden; position: relative;line-height:auto; margin: 0; padding: 0;}
 
 .calendar-header{text-align:center;padding:0;overflow:hidden;}
-.calendar-header .select-box{margin: 0; color:#aaa; }
-.calendar-header .select-box li { margin:0 2px; height:24px; line-height:24px; cursor: pointer; display: inline-block;zoom:1;*display:inline; vertical-align: middle;}
-.calendar-header .select-box li:hover {color:#666}
-.calendar-header .select-box li.area-left,.calendar-header .select-box li.area-right {margin-left: 0; width: 0;height: 0;border-top: 5px dashed transparent;border-bottom: 5px dashed transparent;overflow: hidden; font-size: 0; line-height:0}
-.calendar-header .select-box li.area-left{ border-right: 5px solid #aaa;}
-.calendar-header .select-box li.area-right{border-left: 5px solid #aaa;}
-.calendar-header .select-box li.area-month,.calendar-header .select-box li.area-month-left { margin-left:20px}
-.calendar-header .select-box li.area-middle,.calendar-header .select-box li.area-middle-month { margin-right:4px}
-.calendar-header .select-box li.area-current { float: left; margin-left: 8px;}
-.calendar-header .select-box li.area-middle-month {width:18px}
+.calendar-header ul.select-box{margin: 0; color:#aaa; }
+.calendar-header ul.select-box li { margin:0 2px; height:24px; line-height:24px; cursor: pointer; display: inline-block;zoom:1;*display:inline; vertical-align: middle; padding: 0px 0px !important;}
+.calendar-header ul.select-box li:hover {color:#666}
+.calendar-header ul.select-box li.area-left,.calendar-header ul.select-box li.area-right {margin-left: 0; width: 0;height: 0;border-top: 5px dashed transparent;border-bottom: 5px dashed transparent;overflow: hidden; font-size: 0; line-height:0}
+.calendar-header ul.select-box li.area-left{ border-right: 5px solid #aaa;}
+.calendar-header ul.select-box li.area-right{border-left: 5px solid #aaa;}
+.calendar-header ul.select-box li.area-month,.calendar-header ul.select-box li.area-month-left { margin-left:20px}
+.calendar-header ul.select-box li.area-middle,.calendar-header ul.select-box li.area-middle-month { margin-right:4px}
+.calendar-header ul.select-box li.area-current { float: left; margin-left: 8px;}
+.calendar-header ul.select-box li.area-middle-month {width:18px}
 
 .calendar-quick {position: absolute; width:100%; background-color: #fafafa; margin-left: -3px; display: none; vertical-align: top; padding-bottom: 3px; text-align: center;}
 .calendar-quick-time {padding-top: 3px;padding-bottom: 0px;}

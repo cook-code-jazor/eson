@@ -428,7 +428,7 @@ last modify at 2015-11-2
 						}else{
 							if(index>=0 && i % 7 == index){
 								tmp_date = new Date(date_year(), items[i].month-1, items[i].day); 
-								if(options.before_select && options.before_select(tmp_date)===false) continue;
+								if(options.before_select && options.before_select.call(_this,tmp_date)===false) continue;
 								mon = get_tag(tmp_date);
 								if(maps[mon]) maps[mon] = null;
 								else maps[mon] = tmp_date;
@@ -446,7 +446,7 @@ last modify at 2015-11-2
 						new_date.setHours(time_hours(), time_minutes(), time_seconds(), 0);
 						args.push(fixnumber(new_date.getHours()),fixnumber(new_date.getMinutes()),fixnumber(new_date.getSeconds()));
 					}
-					if(options.before_select && options.before_select(new_date)===false) return;
+					if(options.before_select && options.before_select.call(_this, new_date)===false) return;
 					hide(controls.quick);
 					remove_class(node,"current")
 					if(options.multi_select===true){
@@ -460,6 +460,7 @@ last modify at 2015-11-2
 						args.push(node);
 						__date = new_date;
 					}
+					args.push(true);
 					if(options.onselect)options.onselect.apply(new_date, args);
 					if(options.multi_select!==true && !node.isInMonth) date_up(new_date);
 					if(options.remain!==true)hide(controls.main);					
@@ -495,17 +496,17 @@ last modify at 2015-11-2
 			if(par_cls_name.indexOf("date-part-")>=0){
 				/*选择小时*/
 				if(par_cls_name.indexOf("date-part-h")>=0){
-					if(options.before_select && options.before_select(get_date(null, HTML(target, true), null, null))===false) return;
+					if(options.before_select && options.before_select.call(_this, get_date(null, HTML(target, true), null, null))===false) return;
 					time_hours(HTML(target, true));
 				}
 				/*选择分钟*/
 				else if(par_cls_name.indexOf("date-part-m")>=0){
-					if(options.before_select && options.before_select(get_date(null, null, HTML(target, true), null))===false) return;
+					if(options.before_select && options.before_select.call(_this, get_date(null, null, HTML(target, true), null))===false) return;
 					time_minutes(HTML(target, true));
 				}
 				/*选择秒*/
 				else if(par_cls_name.indexOf("date-part-s")>=0){
-					if(options.before_select && options.before_select(get_date(null, null, null, HTML(target, true)))===false) return;
+					if(options.before_select && options.before_select.call(_this, get_date(null, null, null, HTML(target, true)))===false) return;
 					time_seconds(HTML(target, true));
 				}else{
 					var html = HTML(target);
@@ -519,15 +520,15 @@ last modify at 2015-11-2
 							return;
 						}else{
 							html = parseInt(html);
-							if(options.after_select_year) options.after_select_year(html, 0);
 							set_up(html);
+							if(options.after_select_year) options.after_select_year.call(_this, html, 0);
 						}
 					}
 					else{
 						/*选择月份*/
 						html = parseInt(html);
-						if(options.after_select_month) options.after_select_month(html, 0);
 						set_up(null, html);
+						if(options.after_select_month) options.after_select_month.call(_this, html, 0);
 					}
 				}
 				hide(quick);
@@ -539,7 +540,7 @@ last modify at 2015-11-2
 				set_up(null, HTML(next(target), true) - 1);
 				var m = HTML(next(target), true);
 				if(visiable(quick)) init_monthes(m, qu_content);
-				if(options.after_select_month) options.after_select_month(m, -1);
+				if(options.after_select_month) options.after_select_month.call(_this, m, -1);
 				return;
 			}
 			/*点击右侧月份控制器*/
@@ -547,7 +548,7 @@ last modify at 2015-11-2
 				set_up(null, HTML(last(target), true) + 1);
 				var m = HTML(last(target), true);
 				if(visiable(quick)) init_monthes(m, qu_content);
-				if(options.after_select_month) options.after_select_month(m, 1);
+				if(options.after_select_month) options.after_select_month.call(_this, m, 1);
 				return;
 			}
 			/*点击月份控制器主体*/
@@ -569,7 +570,7 @@ last modify at 2015-11-2
 				if(year<=99) return;
 				if(visiable(quick)) init_years(year, qu_content, null);
 				set_up(year);
-				if(options.after_select_year) options.after_select_year(year, -1);
+				if(options.after_select_year) options.after_select_year.call(_this, year, -1);
 				return;
 			}
 			/*点击右侧年份控制器*/
@@ -577,7 +578,7 @@ last modify at 2015-11-2
 				var year = HTML(last(target), true)+1;
 				if(visiable(quick)) init_years(year, qu_content, null);
 				set_up(year);
-				if(options.after_select_year) options.after_select_year(year, 1);
+				if(options.after_select_year) options.after_select_year.call(_this, year, 1);
 				return;
 			}
 			/*点击年份控制器主体*/
@@ -612,7 +613,7 @@ last modify at 2015-11-2
 		/*渲染控件*/
 		function date_up(date) {
 			_last_selected = null;
-			if(options.before_render) options.before_render(date);
+			if(options.before_render) options.before_render.call(_this, date);
 			var space = tool_get_week(date, 1) - options.first_week_day;
 			if(space<0) space = 7+space;
 			var index = 1,
@@ -675,10 +676,11 @@ last modify at 2015-11-2
 					if(options.cell_height){
 						dateBox[i].style.height = options.cell_height + "px";
 						dateBox[i].childNodes[0].style.height = (options.cell_height-4) + "px";
+						dateBox[i].childNodes[0].style.lineHeight = (options.cell_height-4) + "px";
 					}
 				}
 			}
-			if(options.after_render) options.after_render(date);
+			if(options.after_render) options.after_render.call(_this, date);
 		}
 		/*指定月份和年份渲染控件*/
 		function set_up(year, month){
@@ -759,14 +761,14 @@ last modify at 2015-11-2
 			if(!__date) __date = new Date();
 		}else{
 			__date = parse_date(__date);
-			if(!__date) __date = new Date();
-			maps[get_tag(__date)] = __date;
+			if(!__date){
+				__date = new Date();
+			}else{
+				maps[get_tag(__date)] = __date;
+			}
 			if(!options.onselect) options.onselect = function(y, M, d, h, m, s){
 				src.value = options.format ? format_date(this, options.format) : (y + "-" + M + "-" + d + (options.show_time===true ? (" " + h + ":" + m + ":" + s) : ""));
 			};
-			var args = [__date.getFullYear(), fixnumber(__date.getMonth()+1),fixnumber(__date.getDate())];
-			if(options.show_time===true) args.push(fixnumber(__date.getHours()),fixnumber(__date.getMinutes()),fixnumber(__date.getSeconds()));
-			options.onselect.apply(__date,args);
 		}
 		function init_maps(value, clear){
 			if(clear===true){
