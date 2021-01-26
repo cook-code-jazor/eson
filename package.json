@@ -1,0 +1,22 @@
+{
+  "name": "eson",
+  "version": "1.0.0",
+  "description": "用于web的简单日历控件",
+  "main": "./eson/eson.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cook-code-jazor/eson.git"
+  },
+  "keywords": [
+    "日历"
+  ],
+  "author": "anlige",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cook-code-jazor/eson/issues"
+  },
+  "homepage": "https://github.com/cook-code-jazor/eson#readme"
+}
