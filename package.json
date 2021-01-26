@@ -1,5 +1,5 @@
 {
-  "name": "eson",
+  "name": "@cook-code-jazor/eson",
   "version": "1.0.0",
   "description": "用于web的简单日历控件",
   "main": "./eson/eson.min.js",
